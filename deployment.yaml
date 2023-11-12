@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-search-serv
+spec:
+  replicas: 2  # Adjust as needed
+  selector:
+    matchLabels:
+      app: catalog-search-serv
+  template:
+    metadata:
+      labels:
+        app: catalog-search-serv
+    spec:
+      containers:
+      - name: catalog-search-serv
+        image: localhost:5000/catalog-search-serv:1
+        ports:
+        - containerPort: 8080
+
+---        
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-search-service
+spec:
+  selector:
+    app: catalog-search-serv
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer  # Use "ClusterIP" for an internal service
